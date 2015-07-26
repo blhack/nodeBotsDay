@@ -1,0 +1,96 @@
+<html>
+	<head>
+			<script type="text/javascript" src="jquery.min.js"></script>
+			<script>
+				var socket = new WebSocket("ws://127.0.0.1:6969");
+
+				function forward() {
+					socket.send("forward");
+					}
+				function backward() {
+					socket.send("backward");
+					}
+				function left() {
+					socket.send("left");
+					}
+				function right() {
+					socket.send("right");
+					}
+				function stop() {
+					socket.send("stop");
+					}
+				function spin() {
+					socket.send("spin");
+					}
+				function stopSpin() {
+					socket.send("stopSpin");
+				}
+				function reverseSpin() {
+					socket.send("reverseSpin");
+					}
+
+
+			</script>
+			<script>
+			$(document).ready(function() {
+				console.log("Ready!");
+				$(document).keypress(function(e) {
+					console.log(e.which);
+					if (e.which == 119) {
+						backward();
+						}
+					if (e.which == 97) {
+						left();
+						}
+					if (e.which == 115) {
+						forward();
+						}
+					if (e.which == 100) {
+						right();
+						}
+					if (e.which == 120) {
+						stop();
+						}
+					if (e.which == 32) {
+						spin();
+						}
+					if (e.which == 110) {
+						reverseSpin();
+						}
+				});	
+				$(document).keyup(function(e) {
+					console.log(e.which);
+					if (e.which != 32) {
+						stop();
+						}
+					if (e.which == 32) {
+						stopSpin();
+						}
+					if (e.which == 78) {
+						stopSpin();
+					}
+				});
+			});
+			</script>
+			<style>
+				.button {
+					background-color:#ff0000;
+					width:100px;
+					height:100px;
+					padding:20px;
+				}
+			</style>
+	</head>
+
+<table border=0>
+	<tr>
+		<td></td><td><div class=button id=forward onclick="forward()">Forward</div></td><td></td>
+	</tr>
+	<tr>
+		<td><div class=button id=left onclick='left()'>Left</div></td><td><div class=button id=stop onclick='stop()'>Stop</div></td><td><div class=button id=right onclick="right()">Right</div></td>
+	<tr>
+		<td></td><td><div class=button id=backward onclick="backward()">Back</div></td><td></td>
+	</tr>
+</table>
+</html>
+	

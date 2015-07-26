@@ -1,7 +1,11 @@
 var five = require("johnny-five");
 var board = new five.Board();
-
 var motors;
+var ws;
+var f;
+var r;
+
+var WebSocketServer = require('ws').Server, wss = new WebSocketServer({port: 6969});
 
 board.on("ready", function() {
   // Johnny-Five provides pre-packages shield configurations!
@@ -17,11 +21,16 @@ board.on("ready", function() {
 		backward: backward,
 		left: left,
 		right: right,
-		stop: stop
+		stop: stop,
+		spin: spin,
+		stopSpin: stopSpin
   });
 
   motors.speed(255);
 	motors.stop();
+
+	f = five.Pin(2);
+	r = five.Pin(3);
 });
 
 function forward() {
@@ -45,3 +54,49 @@ function right() {
 function stop() {
 	motors.stop();
 }
+
+function spin() {
+	f.high();
+}
+
+function stopSpin() {
+	f.low();
+	r.low();
+}
+
+function reverseSpin() {
+	r.high();
+}
+
+
+wss.on('connection', function(ws) {
+   ws.on('message', function(message) {
+	 	if (message == "forward") {
+			forward();
+		}
+		if (message == "backward") {
+			backward();
+		}
+		if (message == "left") {
+			left();
+		}
+		if (message == "right") {
+			right();
+		}
+		if (message == "stop") {
+			stop();
+		}
+		if (message == "spin") {
+			spin();
+		}
+		if (message == "stopSpin") {
+			stopSpin();
+		}
+		if (message == "reverseSpin") {
+			reverseSpin();
+		}
+
+
+	 console.log(message);
+   }); 
+});
